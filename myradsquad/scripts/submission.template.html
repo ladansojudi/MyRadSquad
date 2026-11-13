@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MyRadSquad · Case A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* MyRadSquad's own design language: the app's canvas, near-black ink, pastels only (no
+   browns or beiges), violet for the one action, white cards on a soft lip (no outlines),
+   Rubik in three weights. */
+:root{
+  color-scheme:light;
+  --canvas:#fbf6ec; --surface:#ffffff; --cream:#eef0fb; --mint:#e3f3ee; --peach:#fde8e2;
+  --ink:#1c1917; --muted:#55536a;
+  --coral:#f4a594; --cobalt:#aab5ec; --teal:#9fd4c5; --butter:#f6e7b8;
+  --violet:#6a5fd6; --live:#2f7565; --alert:#b9472f;
+  --lip:0 4px 0 0 #e2e3ef;
+  --r:24px;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:96px}
+body{margin:0;background:var(--canvas);color:var(--ink);font:16px/1.5 Rubik,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,ul,ol{margin:0}
+a{color:var(--violet);text-underline-offset:3px}
+img{max-width:100%;display:block}
+.wrap{max-width:1040px;margin:auto;padding-inline:max(16px,env(safe-area-inset-left))}
+
+/* Header: title + segmented tabs, like the app's own segmented control. */
+header{padding:calc(28px + env(safe-area-inset-top)) 0 0}
+.mark{display:flex;gap:4px;align-items:center}
+.mark i{display:block;width:14px;height:14px}
+.mark .q1{background:var(--coral);border-radius:14px 0 0 0}
+.mark .q2{background:var(--cobalt);border-radius:0 14px 0 0}
+.mark .q3{background:var(--teal);border-radius:50%}
+.over{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--violet)}
+h1{font-size:clamp(32px,5vw,48px);line-height:1.05;font-weight:600;letter-spacing:-.03em;margin-top:10px}
+.sub{color:var(--muted);margin-top:8px;max-width:640px}
+nav{position:sticky;top:0;z-index:5;background:var(--canvas);padding:14px 0 12px;margin-top:18px}
+.tabs{display:flex;gap:4px;background:var(--cream);border-radius:999px;padding:4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 auto;font:inherit;font-size:14px;font-weight:500;color:var(--muted);background:transparent;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 2px 0 0 #e2e3ef}
+.tabs button:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+
+main{padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+section{padding-block:22px;display:grid;gap:14px}
+h2{font-size:clamp(22px,3vw,28px);line-height:1.15;font-weight:600;letter-spacing:-.02em}
+h3{font-size:17px;font-weight:600;line-height:1.3}
+.lead{font-size:18px;max-width:760px}
+.big{font-size:clamp(21px,2.8vw,28px);line-height:1.3;font-weight:500;letter-spacing:-.015em;max-width:860px}
+.muted{color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--lip);padding:18px;min-width:0}
+.tint-coral{background:color-mix(in srgb,var(--coral) 32%,var(--surface))}
+.tint-cobalt{background:color-mix(in srgb,var(--cobalt) 34%,var(--surface))}
+.tint-teal{background:color-mix(in srgb,var(--teal) 34%,var(--surface))}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:860px){.g5{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr}}
+@media(max-width:620px){.g2{grid-template-columns:1fr}}
+
+.label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.chip{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--cream);color:var(--ink);white-space:nowrap}
+.found{background:var(--teal)}.partial{background:var(--cobalt)}.assumed{background:var(--coral)}
+.ref{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:8px;background:var(--cream);color:var(--ink)}
+
+/* Facts and stats */
+.fact .label{margin-bottom:4px;color:var(--violet)}
+.stat .n{font-size:32px;font-weight:600;letter-spacing:-.04em;line-height:1}
+.stat .m{font-size:13px;color:var(--muted);margin-top:4px}
+.stat p.t{font-weight:500;margin-top:8px;line-height:1.35}
+.stat .src{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* Research questions */
+.groups{display:grid;gap:12px;grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:900px){.groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.groups{grid-template-columns:1fr}}
+.groups .card{display:grid;gap:10px;align-content:start}
+.rq{display:grid;gap:2px}.rq b{font-weight:600;color:var(--violet);font-size:13px}.rq span{font-size:15px;line-height:1.35}.rq em{font-style:normal;font-size:12px;color:var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
+
+.qa{display:grid;gap:10px}
+.qa .top{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.qa .q{font-weight:600}.qa .q b{color:var(--violet);margin-right:6px;font-weight:600}
+.qa ul{list-style:none;padding:0;display:grid;gap:6px;font-size:14px;color:var(--muted)}
+.qa li .ref{margin-right:6px;color:var(--ink)}
+.rgroup{display:grid;gap:10px}.rgroup>h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+.rows{display:grid;gap:0}
+.row{display:grid;grid-template-columns:104px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--cream)}
+.row:last-child{border-bottom:0}
+.row b{font-weight:600;color:var(--violet)}
+@media(max-width:520px){.row{grid-template-columns:1fr;gap:2px}}
+
+/* Problem / solution */
+.problem .k,.sol .k{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--violet)}
+.problem,.sol{display:grid;gap:8px;align-content:start}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;font-weight:500}
+.flow span{background:var(--surface);box-shadow:0 2px 0 0 #e2e3ef;border-radius:999px;padding:6px 14px}
+.flow i{font-style:normal;color:var(--muted)}
+.spark{display:grid;gap:14px}
+.spark .glyph{width:44px;height:44px}
+.rule{display:flex;gap:12px;align-items:center;background:var(--surface);border-radius:16px;padding:10px 14px}
+.rule .ic{width:30px;height:30px;border-radius:10px;flex:none;display:grid;place-items:center;font-size:15px}
+.rules{display:grid;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:620px){.rules{grid-template-columns:1fr}}
+
+/* Design file */
+.tools ol{padding-left:20px;display:grid;gap:8px}
+.risk{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:18px;overflow:hidden}
+.risk div{padding:12px 14px;border-bottom:1px solid var(--cream);font-size:15px}
+.risk .h{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--mint)}
+.risk .r{background:var(--surface)}.risk .f{background:var(--surface)}
+@media(max-width:620px){.risk{grid-template-columns:1fr}.risk .h:nth-child(2){display:none}.risk .f{padding-top:0}}
+.screens{display:grid;gap:18px;grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:900px){.screens{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:640px){.screens{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+figure{margin:0;display:grid;gap:8px;align-content:start}
+figure img{border-radius:22px;box-shadow:var(--lip);background:var(--surface)}
+figcaption{display:grid;gap:2px}
+figcaption b{font-size:14px;font-weight:600}
+figcaption span{font-size:13px;color:var(--muted);line-height:1.35}
+figcaption .n{font-size:12px;font-weight:600;color:var(--violet)}
+
+/* Experiment */
+.note{display:grid;gap:14px;max-width:780px}
+.note p{line-height:1.55}
+.note b{font-weight:600}
+.ab{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:620px){.ab{grid-template-columns:1fr}}
+.todo{background:var(--butter);border-radius:16px;padding:12px 14px;font-size:14px}
+.plan h2{font-size:18px;margin-top:6px}
+.plan ul,.plan ol{padding-left:20px;display:grid;gap:6px}
+.plan table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:16px;overflow:hidden;box-shadow:var(--lip);font-size:15px}
+.plan th,.plan td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--cream);vertical-align:top}
+.plan th{background:var(--mint);font-weight:600;font-size:13px}
+.plan tr:last-child td{border-bottom:0}
+.plan code{background:var(--cream);border-radius:6px;padding:1px 5px;font-size:14px}
+
+footer{padding:8px 0 calc(28px + env(safe-area-inset-bottom));color:var(--muted);font-size:13px}
+@media(prefers-reduced-motion:no-preference){[role=tabpanel]{animation:in .22s cubic-bezier(.23,1,.32,1)}@keyframes in{from{opacity:.3;transform:translateY(6px)}}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="mark" aria-hidden="true"><i class="q1"></i><i class="q2"></i><i class="q3"></i></div>
+    <p class="over" style="margin-top:14px">MyRadSquad · Squad+ · Case A</p>
+    <h1>From brief to build</h1>
+    <p class="sub">The research behind the app, the problem it solves, and the design file of the working iOS build: every screen, the AI tools used, and the experiment note.</p>
+  </div>
+</header>
+<nav aria-label="Sections">
+  <div class="wrap">
+    <div class="tabs" role="tablist">
+      <button role="tab" id="t-readme" aria-controls="readme" aria-selected="true">Read me</button>
+      <button role="tab" id="t-brief" aria-controls="brief" aria-selected="false">1 · Brief</button>
+      <button role="tab" id="t-research" aria-controls="research" aria-selected="false">2 · Research</button>
+      <button role="tab" id="t-problem" aria-controls="problem" aria-selected="false">3 · Problem</button>
+      <button role="tab" id="t-solution" aria-controls="solution" aria-selected="false">4 · Solution</button>
+      <button role="tab" id="t-design" aria-controls="design" aria-selected="false">5 · Design file</button>
+      <button role="tab" id="t-experiment" aria-controls="experiment" aria-selected="false">6 · Experiment</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- READ ME -->
+<div role="tabpanel" id="readme" aria-labelledby="t-readme">
+  <section>
+    <p class="label">Read me first</p>
+    <h2>What's in this file</h2>
+    <p class="lead">Everything we're sending, in one page. Use the tabs at the top (on a phone, swipe them sideways). Nothing to install: the screenshots are inside the file and it works offline.</p>
+  </section>
+  <section>
+    <div class="grid g2">
+      <div class="card tint-cobalt"><p class="label" style="color:var(--violet)">1 · Brief</p><p>The job, the business model, and the 11 research questions we asked.</p></div>
+      <div class="card tint-teal"><p class="label" style="color:var(--violet)">2 · Research</p><p>What we found for each question, with sources, and the five numbers the design is built on.</p></div>
+      <div class="card tint-coral"><p class="label" style="color:var(--violet)">3 · Problem</p><p>Four problems, our three assumptions, and the "how might we" questions.</p></div>
+      <div class="card tint-cobalt"><p class="label" style="color:var(--violet)">4 · Solution</p><p>The flow, Squad Spark (the AI feature) and the six solutions we designed.</p></div>
+      <div class="card tint-teal"><p class="label" style="color:var(--violet)">5 · Design file</p><p>The AI tools used, what would make Spark feel creepy or spammy and what prevents it, and 16 screenshots of the build in flow order.</p></div>
+      <div class="card tint-coral"><p class="label" style="color:var(--violet)">6 · Experiment</p><p>Paywall A vs B side by side, the half-page experiment note, and the test plan: how we would run it.</p></div>
+    </div>
+  </section>
+  <section>
+    <p class="label">The prototype</p>
+    <div class="card" style="display:grid;gap:10px">
+      <p><b style="font-weight:600">How to open it:</b> it runs on your own Mac, in the iPhone Simulator or on an iPhone by cable. The steps are in <b style="font-weight:600">README.pdf</b>, at the top of the folder.</p>
+      <p class="muted">No time to run it? <b style="font-weight:600">Prototype walkthrough.mp4</b>, next to this file, shows the whole flow in two minutes.</p>
+      <p class="muted">A working iOS app, not a mock-up. Walk it in this order: spin the birthday wheel to any date 13+ years ago → swipe the three feature screens → pick what you're here for → Paywall A ("Try 3 days free" or "No thanks") → Home. For the AI feature: Study Hall → ⚙️ → Add Spark (state 1); the Lunch Table Legends chat and Cousins on Home (state 2).</p>
+      <p class="muted">The small violet tab on the right edge of every screen is the prototype menu: it jumps to any state, including Paywall B. Grey, dashed screens tagged "Wireframe" are outside the brief on purpose.</p>
+    </div>
+  </section>
+</div>
+
+<!-- 1 · BRIEF -->
+<div role="tabpanel" id="brief" aria-labelledby="t-brief" hidden>
+  <section>
+    <p class="label">The job</p>
+    <p class="lead">Design the first Squad+ experience for US teens (13–17): onboarding (feature screens, a 13+ gate, "why are you here?") → paywall A/B → Home → one generative AI feature, as a working build on a phone.</p>
+    <div class="grid g3">
+      <div class="card fact tint-coral"><p class="label">Insight</p><p>A quiet squad feels dead. Teens pay for what makes it feel alive.</p></div>
+      <div class="card fact tint-cobalt"><p class="label">Free vs Squad+</p><p>Free: 5 people. Squad+: 12 people, premium fun and one AI feature.</p></div>
+      <div class="card fact tint-teal"><p class="label">Price</p><p>$3.99/week or $29.99/year, 3-day free trial.</p></div>
+    </div>
+  </section>
+  <section>
+    <p class="label">Our core research questions</p>
+    <div class="groups">
+      <div class="card"><h3><span class="dot" style="background:var(--coral)"></span>User</h3>
+        <p class="rq"><b>RQ1</b><span>What makes a group feel alive?</span><em>Desk + competitors</em></p>
+        <p class="rq"><b>RQ2</b><span>What do teens pay for?</span><em>Desk</em></p></div>
+      <div class="card"><h3><span class="dot" style="background:var(--cobalt)"></span>Onboarding</h3>
+        <p class="rq"><b>RQ3</b><span>How do competitors show value before paying?</span><em>Competitors</em></p>
+        <p class="rq"><b>RQ4</b><span>Does a new user join by invite, or start their own squad?</span><em>Company</em></p></div>
+      <div class="card"><h3><span class="dot" style="background:var(--teal)"></span>Paywall</h3>
+        <p class="rq"><b>RQ5</b><span>Weekly or annual, and how many pay after the trial?</span><em>Desk (benchmarks)</em></p>
+        <p class="rq"><b>RQ6</b><span>Can an under-18 pay alone?</span><em>Desk (Apple)</em></p></div>
+      <div class="card"><h3><span class="dot" style="background:var(--coral)"></span>AI</h3>
+        <p class="small">The brief doesn't say what the AI does; we decide (S1).</p>
+        <p class="rq"><b>RQ7</b><span>When does AI feel creepy?</span><em>Desk</em></p>
+        <p class="rq"><b>RQ8</b><span>What data can the AI see?</span><em>Company</em></p>
+        <p class="rq"><b>RQ9</b><span>What does AI do in apps like this today?</span><em>Desk</em></p></div>
+      <div class="card"><h3><span class="dot" style="background:var(--cobalt)"></span>Home</h3>
+        <p class="rq"><b>RQ10</b><span>What should a new user see on Home?</span><em>Competitors + desk</em></p>
+        <p class="rq"><b>RQ11</b><span>When does an app or AI feel spammy?</span><em>Desk + competitors</em></p></div>
+    </div>
+  </section>
+</div>
+
+<!-- 2 · RESEARCH -->
+<div role="tabpanel" id="research" aria-labelledby="t-research" hidden>
+  <section>
+    <div class="card" style="display:grid;gap:16px">
+      <p class="label">Result</p>
+      <h2>Teens pay for a squad that feels alive, but leave when it feels forced or creepy.</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><span class="chip found">8 found</span><span class="chip partial">1 partial</span><span class="chip assumed">2 assumed</span><span class="small">of 11 core questions</span></div>
+    </div>
+    <div class="grid g5">
+      <div class="card stat"><p class="n">86%</p><p class="m">of 13–21s keep streaks</p><p class="t">Daily rituals work. Make them optional.</p><p class="src">Bits of Freedom survey <a href="https://edri.org/our-work/new-study-reveals-how-young-people-are-influenced-by-gamification-features-on-snapchat/">↗</a></p></div>
+      <div class="card stat"><p class="n">30M</p><p class="m">Snapchat paid subscribers</p><p class="t">Sell fun and AI, not just "12 people".</p><p class="src">Snap announcement <a href="https://newsroom.snap.com/snapchat-subscription-offerings-surpass-30-million?lang=te-IN">↗</a></p></div>
+      <div class="card stat"><p class="n">1 in 3</p><p class="m">teen AI users felt uncomfortable</p><p class="t">AI must be opt-in and visible to all.</p><p class="src">Common Sense Media <a href="https://about.commonsensemedia.org/press-room/press-releases/nearly-3-in-4-teens-have-used-ai-companions-new-national-survey-finds">↗</a></p></div>
+      <div class="card stat"><p class="n">44%</p><p class="m">annual subs left after year one (weekly 3%)</p><p class="t">Lead with annual savings and a clear renewal.</p><p class="src">RevenueCat report <a href="https://revenuecat.com/state-of-subscription-apps-2025">↗</a></p></div>
+      <div class="card stat"><p class="n">2 of 3</p><p class="m">competitors show value before the paywall</p><p class="t">Show the value before the paywall.</p><p class="src">Our competitor matrix</p></div>
+    </div>
+    <p class="small">Figures are the sources' own (↗); "2 of 3" is our competitor count. They describe other people, not our users.</p>
+  </section>
+
+  <section>
+    <p class="label">How we got there</p>
+    <h2>Question → answer → source</h2>
+
+    <div class="rgroup"><h3>User</h3>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ1</b>What makes a group feel alive?</p><span class="chip found">Found</span></div>
+        <p>Small daily rituals: streaks, one daily prompt, a Home Screen widget. But they backfire when they feel forced.</p>
+        <ul><li><span class="ref">Desk</span>Bits of Freedom survey (ages 13–21): 86% keep streaks, 42% would remove them. <a href="https://edri.org/our-work/new-study-reveals-how-young-people-are-influenced-by-gamification-features-on-snapchat/">↗</a></li><li><span class="ref">Competitors</span>BeReal breaks silence with a daily prompt, Locket with a widget; BeReal later lost users. <a href="https://platformer.news/how-bereal-missed-its-moment">↗</a></li></ul></div>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ2</b>What do teens pay for?</p><span class="chip found">Found</span></div>
+        <p>Fun, early features, AI tools, and things they don't want to lose (streaks).</p>
+        <ul><li><span class="ref">Desk</span>Snap: 30M subscribers; the AI/AR tier Lens+ grew ~600% this year. <a href="https://newsroom.snap.com/snapchat-subscription-offerings-surpass-30-million?lang=te-IN">↗</a></li><li><span class="ref">Desk</span>25% of young streak users paid €0.99 to restore a broken streak. <a href="https://edri.org/our-work/new-study-reveals-how-young-people-are-influenced-by-gamification-features-on-snapchat/">↗</a></li></ul></div>
+    </div>
+
+    <div class="rgroup"><h3>Onboarding</h3>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ3</b>How do competitors show value before paying?</p><span class="chip found">Found</span></div>
+        <p>Only Locket shows the benefit before sign-up; Locket and BeReal explain empty screens, with no paywall in the core flow.</p>
+        <ul><li><span class="ref">Competitors</span>Competitor matrix: Locket shows the widget before sign-up; BeReal's first screen is just a logo, Snapchat's just sign-in buttons.</li><li><span class="ref">Desk</span>Partiful lets guests RSVP without an account. <a href="https://nogood.io/blog/partiful-marketing-strategy/">↗</a></li></ul></div>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ4</b>Does a new user join by invite, or start their own squad?</p><span class="chip assumed">Assumed</span></div>
+        <p>Unknown. Assumption A1: most arrive by invite; a "create + invite" flow for the rest.</p>
+        <ul><li><span class="ref">Company</span>Ask the company.</li><li><span class="ref">Competitors</span>BeReal invites via QR, link and "skip".</li></ul></div>
+    </div>
+
+    <div class="rgroup"><h3>Paywall</h3>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ5</b>Weekly or annual, and how many pay after the trial?</p><span class="chip found">Found</span></div>
+        <p>Most pick weekly, but annual subscribers stay; nearly half of trials cancel on day one.</p>
+        <ul><li><span class="ref">Desk</span>Adapty: 62% of revenue is weekly; 44% of trials cancel in 24h. <a href="https://adapty.io/state-of-paywalls/report/">↗</a></li><li><span class="ref">Desk</span>RevenueCat: year-one retention 44% annual vs 3% weekly. <a href="https://revenuecat.com/state-of-subscription-apps-2025">↗</a></li></ul></div>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ6</b>Can an under-18 pay alone?</p><span class="chip partial">Partial</span></div>
+        <p>Often not: with Ask to Buy on, a parent must approve. How it works with trials is unclear.</p>
+        <ul><li><span class="ref">Desk</span>Apple Support: approval required; unanswered requests expire in 24h. <a href="https://support.apple.com/105055">↗</a></li></ul></div>
+    </div>
+
+    <div class="rgroup"><h3>AI</h3>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ7</b>When does AI feel creepy?</p><span class="chip found">Found</span></div>
+        <p>When it knows something it shouldn't, asks about people in photos, or can't be turned off.</p>
+        <ul><li><span class="ref">Desk</span>Snapchat My AI coverage: location, photo questions, can't remove it. <a href="https://abc7.com/snapchat-ai-chatbot-artificial-intelligence/13190393/">↗</a></li><li><span class="ref">Desk</span>Common Sense: 1 in 3 teen AI users felt uncomfortable. <a href="https://about.commonsensemedia.org/press-room/press-releases/nearly-3-in-4-teens-have-used-ai-companions-new-national-survey-finds">↗</a></li></ul></div>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ8</b>What data can the AI see?</p><span class="chip assumed">Assumed</span></div>
+        <p>Unknown. Assumption A3: only the squad chat it's on in; no DMs, location or faces; visible to all.</p>
+        <ul><li><span class="ref">Company</span>Ask the company.</li></ul></div>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ9</b>What does AI do in apps like this?</p><span class="chip found">Found</span></div>
+        <p>Three ways: a bot in the chat (risky), creating fun content, and private catch-up summaries.</p>
+        <ul><li><span class="ref">Desk</span>Discord shut down its chat bot Clyde in 2023 after offensive replies. <a href="https://www.engadget.com/discord-is-already-killing-clyde-its-experimental-openai-chatbot-155231238.html">↗</a></li><li><span class="ref">Desk</span>Apple Genmoji makes an emoji from a typed description. <a href="https://www.macrumors.com/how-to/create-custom-emoji-messages-genmoji/">↗</a></li><li><span class="ref">Desk</span>WhatsApp summarises unread messages; off by default, only you see it. <a href="https://www.macrumors.com/2025/06/26/whatsapp-now-summarizes-unread-messages-ai/">↗</a></li></ul></div>
+    </div>
+
+    <div class="rgroup"><h3>Home</h3>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ10</b>What should a new user see on Home?</p><span class="chip found">Found</span></div>
+        <p>One next step, why an empty area is empty, and the squad itself.</p>
+        <ul><li><span class="ref">Competitors</span>Competitor matrix: Locket and BeReal explain empty screens and show one step.</li><li><span class="ref">Desk</span>On BeReal you can't see friends' posts until you post yours. <a href="https://help.bereal.com/hc/articles/7350386715165">↗</a></li><li><span class="ref">Desk</span>Geneva splits a group into chat, audio and video rooms. <a href="https://www.geneva.com/about">↗</a></li></ul></div>
+      <div class="card qa"><div class="top"><p class="q"><b>RQ11</b>When does an app or AI feel spammy?</p><span class="chip found">Found</span></div>
+        <p>When it comes too often, sits above friends, and can't be removed.</p>
+        <ul><li><span class="ref">Desk</span>Common Sense: half of teens 11–17 get 237+ notifications a day. <a href="https://about.commonsensemedia.org/press-room/press-releases/teens-are-bombarded-with-hundreds-of-notifications-a-day">↗</a></li><li><span class="ref">Desk</span>Snapchat's pinned, unremovable My AI got 75% one-star reviews. <a href="https://techcrunch.com/2023/04/24/snapchat-sees-spike-in-1-star-reviews-as-users-pan-the-my-ai-feature-calling-for-its-removal">↗</a></li><li><span class="ref">Competitors</span>Competitor matrix: BeReal ties notifications to one daily moment; Snapchat asks mid sign-up, before any value.</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Extra findings</p>
+    <div class="card rows">
+      <div class="row"><b>Usage</b><span>Teens lead with YouTube, TikTok, Instagram and Snapchat; 36% are almost constantly online (Pew).</span></div>
+      <div class="row"><b>Sign-up</b><span>All three competitors put sign-up inside onboarding.</span></div>
+      <div class="row"><b>Paywall</b><span>Locket Gold opens on a locked feature, closes with "No thanks", pre-selects annual shown monthly ($2.99/mo). Snapchat+ shows no price on its first screen.</span></div>
+      <div class="row"><b>Premium</b><span>Assumption A2: themes, effects, games, 12 people, AI; we create the brand.</span></div>
+      <div class="row"><b>Age</b><span>The FTC asks for a neutral age screen (never pre-filled at 13+), before collecting personal data. Apple's Declared Age Range API gives an age range where the law requires it.</span></div>
+      <div class="row"><b>Benchmark</b><span>No numbers of our own; industry paywall → paid 2.75%, trial → paid 26% (Adapty).</span></div>
+    </div>
+  </section>
+</div>
+
+<!-- 3 · PROBLEM -->
+<div role="tabpanel" id="problem" aria-labelledby="t-problem" hidden>
+  <section>
+    <p class="label">Problem</p>
+    <p class="big">A new teen lands in a quiet squad and sees no reason to pay for Squad+. The known ways to break the silence backfire when forced.</p>
+  </section>
+  <section>
+    <p class="label">Four problems</p>
+    <div class="grid g2">
+      <div class="card problem tint-coral"><p class="k">P1 · Silence</p><h3>A quiet or empty squad feels dead.</h3><p class="muted">86% of teens keep streaks (daily messaging runs), but 42% would remove them.</p><span class="ref" style="justify-self:start">RQ1 · RQ10 · Found</span></div>
+      <div class="card problem tint-cobalt"><p class="k">P2 · Value and timing</p><h3>We ask for money before value is felt.</h3><p class="muted">Teens pay for fun and AI, not 12 seats; 44% of trials cancel on day one.</p><span class="ref" style="justify-self:start">RQ2 · RQ3 · RQ5 · Found</span></div>
+      <div class="card problem tint-teal"><p class="k">P3 · AI trust and spam</p><h3>AI can feel like a watcher or spam.</h3><p class="muted">Snapchat's pinned, unremovable My AI got 75% one-star reviews.</p><span class="ref" style="justify-self:start">RQ7 · RQ9 · RQ11 · Found · RQ8 Assumed</span></div>
+      <div class="card problem tint-coral"><p class="k">P4 · Teen purchase</p><h3>A teen may need a parent's OK.</h3><p class="muted">With Ask to Buy, a parent must approve; requests expire in 24h.</p><span class="ref" style="justify-self:start">RQ6 · Partial</span></div>
+    </div>
+  </section>
+  <section>
+    <p class="label">Assumptions · to confirm with the company</p>
+    <div class="grid g3">
+      <div class="card"><p class="label" style="color:var(--violet)">A1 · RQ4</p><p>Most users arrive by invite into an existing squad.</p></div>
+      <div class="card"><p class="label" style="color:var(--violet)">A2 · Premium</p><p>Premium fun = themes, effects, games. In the app: focus, study and game rooms; a plain hangout stays free.</p></div>
+      <div class="card"><p class="label" style="color:var(--violet)">A3 · RQ8</p><p>AI sees only that squad chat; everyone sees it, anyone can turn it off.</p></div>
+    </div>
+  </section>
+  <section>
+    <p class="label">How might we</p>
+    <div class="card rows">
+      <div class="row"><b>HMW1</b><span>make a squad feel alive in 2 minutes, without pressure?</span></div>
+      <div class="row"><b>HMW2</b><span>let teens feel Squad+ before we ask for money?</span></div>
+      <div class="row"><b>HMW3</b><span>make the AI feel like a fun squad member, not a watcher?</span></div>
+      <div class="row"><b>HMW4</b><span>keep a teen moving while a parent approves?</span></div>
+    </div>
+  </section>
+</div>
+
+<!-- 4 · SOLUTION -->
+<div role="tabpanel" id="solution" aria-labelledby="t-solution" hidden>
+  <section>
+    <p class="label">Solution</p>
+    <p class="big">Show the squad alive first, ask for money second; one AI spark a day brings a quiet squad back.</p>
+    <div class="flow"><span>13+ gate (at sign-in)</span><i>→</i><span>Feature screens</span><i>→</i><span>What are you here for?</span><i>→</i><span>Paywall A/B</span><i>→</i><span>Home</span><i>→</i><span>Spark</span></div>
+    <p class="small">The age gate comes first, not third: a teen under 13 should not see the product pitch, and the FTC asks for the age screen before any personal data.</p>
+  </section>
+
+  <section>
+    <div class="card spark tint-cobalt">
+      <div style="display:flex;gap:14px;align-items:center">
+        <svg class="glyph" viewBox="0 0 28 30" aria-hidden="true"><path d="M8 3.6H20A6 6 0 0 1 26 9.6V17.6A6 6 0 0 1 20 23.6H11L5 28.6V23.6A6 6 0 0 1 2 17.6V9.6A6 6 0 0 1 8 3.6Z" fill="#8e9ad8"/><path d="M8 2H20A6 6 0 0 1 26 8V16A6 6 0 0 1 20 22H11L5 27V22A6 6 0 0 1 2 16V8A6 6 0 0 1 8 2Z" fill="#aab5ec"/><path transform="translate(6.4 3.4) scale(.625)" d="M12 0C13 8 16 11 24 12 16 13 13 16 12 24 11 16 8 13 0 12 8 11 11 8 12 0Z" fill="#fff"/></svg>
+        <div><p class="label" style="color:var(--violet)">Key idea · S1 · AI feature · HMW3</p><h2>Squad Spark: when the chat goes quiet, one spark a day gets the squad talking.</h2></div>
+      </div>
+      <div class="grid g2">
+        <div class="card"><p class="label">What it does</p><p>Leaves one "spark" in the squad chat: a question, a mini game or a photo task. "Drop this week's funniest moment", "Who wakes up first? Vote".</p></div>
+        <div class="card"><p class="label">When</p><p>Only after the chat has been quiet for a while; at most once a day. Never in a live squad.</p></div>
+        <div class="card"><p class="label">State 1 · the member who turns it on</p><p>Picks a vibe and sees Spark's four rules before adding it (needs Squad+).</p></div>
+        <div class="card"><p class="label">State 2 · the rest of the squad</p><p>Sees "Maya added Spark" with Mute, and the spark inside their squad's card on Home.</p></div>
+      </div>
+      <div class="rules">
+        <div class="rule"><span class="ic" style="background:var(--teal)">💬</span>Reads only this chat</div>
+        <div class="rule"><span class="ic" style="background:var(--coral)">✕</span>No DMs, faces or location</div>
+        <div class="rule"><span class="ic" style="background:var(--cobalt)">🔔</span>Max once a day, when quiet</div>
+        <div class="rule"><span class="ic" style="background:var(--peach)">🔕</span>Anyone can mute or remove it</div>
+      </div>
+      <p class="small">Not a streak: no counter, nothing to lose if you skip it. Two sparks in a row with no answer and it takes a break. Why: My AI backlash and notification overload (RQ7, RQ11); daily rituals work but backfire when forced (RQ1).</p>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">What we design</p>
+    <div class="grid g2">
+      <div class="card sol"><p class="k">S2 · Feature screens · HMW2</p><h3>A live squad preview before any ask.</h3><p class="muted">Three swipeable pages, one graphic and one idea each: your squad is already talking, rooms to hang out, focus and play in, and Spark so the chat never dies. Locket shows value before sign-up.</p></div>
+      <div class="card sol"><p class="k">S3 · What are you here for? · HMW1</p><h3>One tap: hang out, study, share moments.</h3><p class="muted">Personalises the paywall's headline and art.</p></div>
+      <div class="card sol"><p class="k">S4 · Paywall A / B · HMW2</p><h3>Two paywalls: A fun and AI, B the squad (12 seats).</h3><p class="muted">A leads with what they came for. Annual pre-selected, shown monthly, clear close (like Locket Gold). Metric: day-7 paid conversion per paywall view.</p></div>
+      <div class="card sol"><p class="k">S5 · Home · HMW1</p><h3>Who's here, today's spark, one next step.</h3><p class="muted">Live squads first: who's here and the room friends started (join it or start your own). Quiet squads below, with Spark's spark inside their card. If empty: why + invite (RQ10). No streaks.</p></div>
+      <div class="card sol"><p class="k">S6 · Ask a parent · HMW4</p><h3>"Waiting for approval"; keep using free meanwhile.</h3><p class="muted">Ask to Buy can take up to 24h.</p></div>
+    </div>
+  </section>
+</div>
+
+<!-- 5 · DESIGN FILE -->
+<div role="tabpanel" id="design" aria-labelledby="t-design" hidden>
+  <section>
+    <p class="label">Design file</p>
+    <h2>Screenshots of the working iOS build</h2>
+    <p class="muted">Built in code (Expo / React Native), so the screenshots are the design file. In flow order: onboarding → paywall → Home → the AI feature in both states, then Paywall B.</p>
+  </section>
+
+  <section>
+    <div class="card tools">
+      <p class="label" style="color:var(--violet);margin-bottom:8px">AI tools used</p>
+      {{TOOLS}}
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Spark · what would feel creepy or spammy to a 15-year-old, and what prevents it</p>
+    <div class="risk card" style="padding:0">
+      <div class="h">Would feel creepy or spammy</div><div class="h">The element that prevents it</div>
+      <div class="r">It reads things it shouldn't: DMs, photos, faces, location</div><div class="f">The rules card: reads only this chat <span class="ref">12</span> <span class="ref">15</span></div>
+      <div class="r">It's there without anyone choosing it, and you can't turn it off</div><div class="f">"Maya added Spark" with Mute; anyone can remove it <span class="ref">13</span> <span class="ref">15</span></div>
+      <div class="r">It pings you all day, or sits above your friends</div><div class="f">At most one spark a day, only when the chat is quiet, inside the squad's own card <span class="ref">10</span> <span class="ref">11</span> <span class="ref">14</span></div>
+      <div class="r" style="border-bottom:0">It pretends to be a friend</div><div class="f" style="border-bottom:0">An object, not a mascot: a sparkle in a chat bubble, labelled AI <span class="ref">13</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Home · every element and why</p>
+    <figure class="card" style="padding:12px"><img src="{{IMG:10b-home-annotated}}" alt="Home with every element numbered and the reason for each" loading="lazy" style="box-shadow:none;border-radius:16px"></figure>
+  </section>
+
+  <section>
+    <p class="label">Screens</p>
+    <div class="screens">
+      {{SCREENS}}
+    </div>
+    <p class="small">Screens outside the six solutions (Messages, Moments, You, Search, rooms, notes) are high-fidelity wireframes in the build: grey, dashed, tagged "Wireframe".</p>
+  </section>
+</div>
+
+<!-- 6 · EXPERIMENT -->
+<div role="tabpanel" id="experiment" aria-labelledby="t-experiment" hidden>
+  <section class="note">
+    <p class="label">Experiment note · Paywall A vs B</p>
+    <div class="ab">
+      <figure><img src="{{IMG:08-paywall-a}}" alt="Paywall A" loading="lazy"><figcaption><b>A (control) · fun and AI</b><span>Headline and art follow their answer.</span></figcaption></figure>
+      <figure><img src="{{IMG:16-paywall-b}}" alt="Paywall B" loading="lazy"><figcaption><b>B (variant) · the squad</b><span>"Room for 12." The table is full and two friends want in.</span></figcaption></figure>
+    </div>
+    {{NOTE}}
+  </section>
+  <section class="note plan">
+    <p class="label">Test plan · how we would run it</p>
+    {{PLAN}}
+  </section>
+</div>
+
+</main>
+<footer><div class="wrap">Sources accessed 9 Nov 2026. A1–A3 are our assumptions, to confirm with the company. Screenshots from the iOS build, 13 Nov 2026.</div></footer>
+
+<script>
+const tabs=[...document.querySelectorAll('[role=tab]')];
+function show(id){tabs.forEach(t=>{const on=t.getAttribute('aria-controls')===id;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});}
+tabs.forEach(t=>t.addEventListener('click',()=>{const id=t.getAttribute('aria-controls');show(id);try{history.replaceState(null,'','#'+id)}catch(e){location.hash=id}window.scrollTo({top:0});}));
+function fromHash(){const h=location.hash.slice(1);show(tabs.some(t=>t.getAttribute('aria-controls')===h)?h:'readme');}
+addEventListener('hashchange',fromHash);fromHash();
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "enabledPlugins": {
+    "expo@claude-plugins-official": true
+  },
+  "permissions": {
+    "allow": ["Bash(pnpm -s typecheck)", "Bash(pnpm -s lint)", "Bash(pnpm -s test)", "mcp__argent"]
+  }
+}

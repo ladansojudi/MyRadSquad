@@ -1,0 +1,203 @@
+{
+  "version": 2,
+  "skills": {
+    "argent-android-emulator-setup": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-android-emulator-setup/SKILL.md",
+      "computedHash": "131f900069af776136221b324885c2d059baf2aff4c8610b2eeb90df08cdeda2"
+    },
+    "argent-create-e2e": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-create-e2e/SKILL.md",
+      "computedHash": "ad5ce31daead10a5b1ef2d4a7e9396187be65ccc7e6bc39a5d89d5e2644b046e"
+    },
+    "argent-device-interact": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-device-interact/SKILL.md",
+      "computedHash": "bed9ab70dd28ce224ff94e676e731f62d5b6e0c07f491fc9647b4e05c0b06f22"
+    },
+    "argent-ios-device-interact": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-ios-device-interact/SKILL.md",
+      "computedHash": "e225a9ef4b9459766959b5d14fbdc3cc1cbcd22caa4f2fe83d9aa08952b57104"
+    },
+    "argent-ios-device-setup": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-ios-device-setup/SKILL.md",
+      "computedHash": "03df3489d5dbda7a1cb1ffa80fe066f8ca14ac9a1eeb955dd640a941970ba595"
+    },
+    "argent-ios-simulator-setup": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-ios-simulator-setup/SKILL.md",
+      "computedHash": "81d559d986fdcbfea94082c72376c2753cb8f1235cf2d7c6d5150d61002b730d"
+    },
+    "argent-lens": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-lens/SKILL.md",
+      "computedHash": "061da1afe2b3bf3459d5b732e589a042c0a458449a3e2766a38b6af535253e45"
+    },
+    "argent-macos-app-interact": {
+      "source": "software-mansion/argent",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-macos-app-interact/SKILL.md",
+      "computedHash": "7d142deecd16f56789c1e0e1da32b30621ebf2331116720ad621a8b571508398"
+    },
+    "argent-metro-debugger": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-metro-debugger/SKILL.md",
+      "computedHash": "1155796ea10899be51a2243cf1ccb7e2818027a2c880410cdb639b57710c0e88"
+    },
+    "argent-native-profiler": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-native-profiler/SKILL.md",
+      "computedHash": "f7bfd358b538f0b1b1be697cfcb6a3fa75e4d4003ddefb079a6d265f97f34c7c"
+    },
+    "argent-qa-e2e": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-qa-e2e/SKILL.md",
+      "computedHash": "c990474167686b6614c60618bfb525e30507edb659fb65256ef25bccb4959dbe"
+    },
+    "argent-react-native-app-workflow": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-react-native-app-workflow/SKILL.md",
+      "computedHash": "60a00b74da6de555a391176bac2517ae0b742a07ea4f96f4fb9a846f49230f98"
+    },
+    "argent-react-native-optimization": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-react-native-optimization/SKILL.md",
+      "computedHash": "e9958e56306548ff7656688891886667aca4ef0405774b929a974a439c9851a5"
+    },
+    "argent-react-native-profiler": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-react-native-profiler/SKILL.md",
+      "computedHash": "59d56e3cb3317f3c580cc453f057bcd1bbf380e50cf274f0076ba373c8f2610f"
+    },
+    "argent-screen-recording": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-screen-recording/SKILL.md",
+      "computedHash": "6d68182e028b5cd3bfa4810d091e4676e62aedad142eb3444ae53bd25409165d"
+    },
+    "argent-screenshot-diff": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-screenshot-diff/SKILL.md",
+      "computedHash": "6f69a008c07aecfe94a1f97874385bb98a6c06b440cc9d2c2f894b21d73d1d96"
+    },
+    "argent-settings-permissions": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-settings-permissions/SKILL.md",
+      "computedHash": "96a48f45869bd95217d4787d6d34a457e432cf0cbdd9c4be3ce67c325afb671a"
+    },
+    "argent-test-ui-flow": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-test-ui-flow/SKILL.md",
+      "computedHash": "8f6c6ee704a4d95690df597a741e268a17d87908df251cbcfea2daacc2e682f1"
+    },
+    "argent-tv-interact": {
+      "source": "software-mansion/argent",
+      "ref": "v0.30.0",
+      "sourceType": "github",
+      "skillPath": "packages/skills/skills/argent-tv-interact/SKILL.md",
+      "computedHash": "e5a1bc5658d6192768140ca03410368e93b36a656218fc1c3047ee8a1fa886a3"
+    },
+    "iphone-duo-adaptive-layout": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-adaptive-layout/SKILL.md",
+      "computedHash": "ce73f350523fec24dc106016ab9043629ad648518759a32667ea9c0b2a5b4f10"
+    },
+    "iphone-duo-camera": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-camera/SKILL.md",
+      "computedHash": "77383811f133f1f0e17b762c2d829b968fd28ea38a12bf7cabdac731611beb81"
+    },
+    "iphone-duo-capacitor": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-capacitor/SKILL.md",
+      "computedHash": "42b195f5493be94b5025ce564a24716f8a2b0b46f550a01befbd66c972efc1c1"
+    },
+    "iphone-duo-design-review": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-design-review/SKILL.md",
+      "computedHash": "41f68916b4dcb99567f5ccb80f848331d336fe7d02f6c0485714b666a706a67f"
+    },
+    "iphone-duo-dual-pane-patterns": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-dual-pane-patterns/SKILL.md",
+      "computedHash": "4de3404fa83a3a88343251e848803b51e15a20be39c1174221b797256845f444"
+    },
+    "iphone-duo-flutter": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-flutter/SKILL.md",
+      "computedHash": "bf9eab77262bb19a9ca2c5cf97e5645a85ad7033359133211144bff116f42b93"
+    },
+    "iphone-duo-games": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-games/SKILL.md",
+      "computedHash": "27d796ffcb91293af2944f807187159cc2ce5f635087e9e8fc2ecdd9e661819a"
+    },
+    "iphone-duo-hinge-and-scenes": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-hinge-and-scenes/SKILL.md",
+      "computedHash": "5114f9872d0ae65e3401397efb9771a652c9ba798898319a62792869341a9364"
+    },
+    "iphone-duo-react-native": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-react-native/SKILL.md",
+      "computedHash": "495ba494e2316d229bd679afa1abe0a5506b49d8daf78c7eb95f3ef4e1fcfaaf"
+    },
+    "iphone-duo-readiness": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-readiness/SKILL.md",
+      "computedHash": "f9a12c59df695b7afbf0e1946a3eb3c3aa4520331744c2835ef9925070998dd7"
+    },
+    "iphone-duo-vertical-bars": {
+      "source": "mirzaaghazadeh/iphone-duo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iphone-duo-vertical-bars/SKILL.md",
+      "computedHash": "d31ac05dcf161165b6331c0004bf94ff0dab8e3f10b99bbfba1d8812558af479"
+    }
+  }
+}

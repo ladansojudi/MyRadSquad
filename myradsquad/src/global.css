@@ -1,0 +1,116 @@
+@import 'tailwindcss';
+@import 'uniwind';
+
+@theme {
+  --font-text: 'Rubik-Regular';
+  --font-strong: 'Rubik-Regular';
+  --font-heavy: 'Rubik-Medium';
+  --font-display: 'Rubik-SemiBold';
+
+  /*
+   * Type scale: seven sizes, each with one job.
+   *   hero      onboarding / paywall headline       (display)
+   *   title     tab screen title                    (display)
+   *   headline  sheet and card headline             (display)
+   *   subtitle  card title, squad name              (display)
+   *   body      everything you read                 (strong; heavy for names / row titles)
+   *   caption   secondary lines, meta               (text, muted)
+   *   overline  section labels, ALL CAPS            (heavy, wide tracking, muted)
+   */
+  --text-hero: 34px;
+  --text-hero--line-height: 40px;
+  --text-title: 34px;
+  --text-title--line-height: 38px;
+  --text-headline: 28px;
+  --text-headline--line-height: 32px;
+  --text-subtitle: 19px;
+  --text-subtitle--line-height: 24px;
+  --text-body: 16px;
+  --text-body--line-height: 22px;
+  --text-caption: 14px;
+  --text-caption--line-height: 19px;
+  --text-overline: 12px;
+  --text-overline--line-height: 16px;
+}
+
+/*
+ * Pastel palette. The design has a single look, so the light and dark variants
+ * intentionally share the same values. Fills are pastel; text on them is ink.
+ *
+ * canvas   butter page background       surface  white cards and sheets
+ * content  soft cocoa text (not black)  muted    secondary text
+ * border   ink outlines (art only)      brand    ink buttons
+ * accent   peach   cobalt  periwinkle   teal  mint   cream  soft fills
+ * primary  lively violet for main buttons and selected chips (white text)
+ * live     readable green for "here now" text      alert  readable coral for unread text
+ */
+@layer theme {
+  :root {
+    @variant light {
+      --color-canvas: #fbf6ec;
+      --color-surface: #ffffff;
+      --color-content: #1c1917;
+      --color-muted: #57534e;
+      --color-border: #1c1917;
+      --color-brand: #1c1917;
+      --color-brand-content: #ffffff;
+      --color-accent: #f4a594;
+      --color-accent-content: #1c1917;
+      --color-cobalt: #aab5ec;
+      --color-cobalt-content: #1c1917;
+      --color-teal: #9fd4c5;
+      --color-teal-content: #1c1917;
+      --color-cream: #f6f1e9;
+      --color-faint: #c2b9b2;
+      --color-primary: #6a5fd6;
+      --color-primary-content: #ffffff;
+      --color-live: #2f7565;
+      --color-alert: #b9472f;
+    }
+
+    /* Wireframe: screens outside the six solutions, in greys, so they read as unfinished. */
+    @variant wireframe {
+      --color-canvas: #f1f1f1;
+      --color-surface: #ffffff;
+      --color-content: #3d3d3d;
+      --color-muted: #6e6e6e;
+      --color-border: #3d3d3d;
+      --color-brand: #4d4d4d;
+      --color-brand-content: #ffffff;
+      --color-accent: #d9d9d9;
+      --color-accent-content: #3d3d3d;
+      --color-cobalt: #d0d0d0;
+      --color-cobalt-content: #3d3d3d;
+      --color-teal: #dddddd;
+      --color-teal-content: #3d3d3d;
+      --color-cream: #ebebeb;
+      --color-faint: #c4c4c4;
+      --color-primary: #616161;
+      --color-primary-content: #ffffff;
+      --color-live: #555555;
+      --color-alert: #555555;
+    }
+
+    @variant dark {
+      --color-canvas: #fbf6ec;
+      --color-surface: #ffffff;
+      --color-content: #1c1917;
+      --color-muted: #57534e;
+      --color-border: #1c1917;
+      --color-brand: #1c1917;
+      --color-brand-content: #ffffff;
+      --color-accent: #f4a594;
+      --color-accent-content: #1c1917;
+      --color-cobalt: #aab5ec;
+      --color-cobalt-content: #1c1917;
+      --color-teal: #9fd4c5;
+      --color-teal-content: #1c1917;
+      --color-cream: #f6f1e9;
+      --color-faint: #c2b9b2;
+      --color-primary: #6a5fd6;
+      --color-primary-content: #ffffff;
+      --color-live: #2f7565;
+      --color-alert: #b9472f;
+    }
+  }
+}

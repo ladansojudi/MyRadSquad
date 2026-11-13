@@ -1,0 +1,14 @@
+# Dependencies and generated files (pnpm install / Metro recreate them)
+node_modules/
+.expo/
+uniwind-types.d.ts
+.DS_Store
+
+# PlusMinusOne's brief stays private
+PlusMinusOne_Case_A_MyRadSquad_light.pdf
+
+# Local tooling
+/.claude/
+
+# Duplicate of Submission/Prototype walkthrough.mp4
+myradsquad/docs/walkthrough.mp4
